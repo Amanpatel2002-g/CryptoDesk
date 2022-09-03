@@ -3,9 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:rest_seat_booking_app/views/constants.dart';
 
 class SearchBarWidgetPage {
-  static SearchBarWidget(final TextEditingController controller) {
-    return TextField(
+  static SearchBarWidget(List<String> restList) {
+    return Autocomplete<String>(optionsBuilder: ((textEditingValue) {
+      if (textEditingValue.text.isEmpty) {
+        return const Iterable<String>.empty();
+      } else {
+        return restList.where((word) =>
+            word.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+      }
+    }
+    ),
+    fieldViewBuilder: ((context, controller, focusNode, onFieldSubmitted) {
+      return TextField(
       controller: controller,
+      focusNode: focusNode,
+      onEditingComplete: onFieldSubmitted,
       decoration: InputDecoration(
         label: const Text('Search'),
         suffixIcon: const Icon(Icons.search),
@@ -21,5 +33,6 @@ class SearchBarWidgetPage {
 
       ),
     );
+    }),);
   }
 }

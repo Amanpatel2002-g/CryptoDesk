@@ -16,9 +16,14 @@ class _HomePageState extends State<HomePage> {
   final JSONController jsonController = Get.find();
 
   Jsonmodel? obj;
+  // ignore: non_constant_identifier_names
+  List<String>?rest_list;
   bool isloaded = false;
   void getdata() async {
     obj = await jsonController.jsonToData();
+    rest_list = obj!.restarants.map((e) {
+      return e.name;
+    }).toList();
     setState(() {
       isloaded = true;
     });
@@ -31,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget build(BuildContext context) {
-    final TextEditingController _controller = TextEditingController();
+    // final TextEditingController _controller = TextEditingController();
     return MaterialApp(
       home: Scaffold(
           appBar: AppBarWidgetPage.appBarWidget("This is the titleString"),
@@ -41,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 15),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: SearchBarWidgetPage.SearchBarWidget(_controller),
+                  child: rest_list==null?const Center(child: Text("Loading.....")):SearchBarWidgetPage.SearchBarWidget(rest_list!),
                 ),
                 const SizedBox(height: 20),
                 Container(
